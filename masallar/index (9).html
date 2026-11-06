@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Türk Masalları</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-title: 'Cormorant Garamond', serif;
+      --font-body: 'Lora', serif;
+      --gold-main: #dfa84a;
+      --gold-bright: #f3c267;
+      --gold-dark: #b8822d;
+      
+      --page-bg: #070d14;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-border: rgba(223, 168, 74, 0.28);
+      --card-text: #141f2b;
+      --card-muted: #536473;
+      
+      --deck-bg: rgba(9, 16, 24, 0.92);
+      --deck-border: rgba(223, 168, 74, 0.38);
+      --box-border: rgba(223, 168, 74, 0.35);
+      --btn-bg: #132232;
+      --btn-text: #f0f4f8;
+      --btn-border: rgba(223, 168, 74, 0.4);
+      --tezhip-gold: #c9933b;
+
+      --box-bg: rgba(14, 20, 28, 0.85);
+      --text-main: #eaf1f8;
+      --text-muted: #9bb1c5;
+    }
+
+    body.dark-mode {
+      --page-bg: #04080e;
+      --card-bg: rgba(14, 23, 34, 0.96);
+      --card-border: rgba(223, 168, 74, 0.38);
+      --card-text: #eaf1f8;
+      --card-muted: #9bb1c5;
+      
+      --deck-bg: rgba(7, 12, 18, 0.95);
+      --deck-border: rgba(223, 168, 74, 0.45);
+      --box-border: rgba(223, 168, 74, 0.45);
+      --btn-bg: #0d1722;
+      --btn-text: #f3f7fa;
+      --btn-border: rgba(223, 168, 74, 0.5);
+      --tezhip-gold: #e5b058;
+
+      --box-bg: rgba(8, 12, 18, 0.9);
+      --text-main: #f3f7fa;
+      --text-muted: #8da1b5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); font-size: 16px; background-color: var(--page-bg); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+
+    /* HERO SECTION */
+    .hero-fullscreen {
+      position: relative;
+      height: 100vh;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background-image: 
+        linear-gradient(180deg, rgba(7, 13, 20, 0.3) 0%, rgba(7, 13, 20, 0.7) 70%, var(--page-bg) 100%),
+        url('gorseller/1 numaralı görsel..png');
+      background-size: cover;
+      background-position: center 25%;
+      background-attachment: fixed;
+      z-index: 1;
+    }
+    .hero-fullscreen h1 {
+      font-family: var(--font-title);
+      font-size: clamp(4rem, 10vw, 7.5rem);
+      font-weight: 700;
+      color: var(--gold-main);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 30px rgba(223,168,74,0.4);
+      margin-bottom: 1rem;
+    }
+    .hero-fullscreen p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      max-width: 600px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+
+    /* MAIN CONTENT AREA WITH ZEMIN BACKGROUND */
+    .content-area {
+      position: relative;
+      z-index: 10;
+      margin-top: -50px;
+      padding: 4rem 1.5rem 6rem;
+      background-image: 
+        linear-gradient(180deg, var(--page-bg) 0%, rgba(7, 13, 20, 0.8) 15%, rgba(7, 13, 20, 0.8) 85%, var(--page-bg) 100%),
+        url('gorseller/zemin .jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      border-top: 2px solid var(--gold-main);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+    }
+    
+    .wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* CONTROLS DECK */
+    .controls-deck {
+      background: var(--deck-bg);
+      border: 1px solid var(--deck-border);
+      border-radius: 14px;
+      padding: 0.9rem 1.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 1rem;
+      z-index: 50;
+    }
+
+    .search-wrap { flex: 1 1 240px; }
+    .search-wrap input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      border: 1px solid var(--deck-border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f0f5fa;
+      outline: none;
+    }
+    .search-wrap input:focus { border-color: var(--gold-main); }
+    
+    .btn-actions { display: flex; gap: 0.65rem; align-items: center; }
+    .ctrl-btn {
+      font-family: var(--font-title);
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 0.52rem 1.2rem;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .ctrl-btn:hover { background: var(--gold-main); color: #070d14; border-color: var(--gold-bright); }
+    .btn-select { background: rgba(223, 168, 74, 0.16); color: var(--gold-bright); border-color: var(--gold-main); }
+    .btn-select:hover { background: var(--gold-main); color: #070d14; }
+
+    .theme-btn {
+      background: transparent;
+      border: 1px solid var(--btn-border);
+      color: var(--gold-bright);
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; justify-content: center; align-items: center;
+      background: var(--btn-bg);
+    }
+    .theme-btn:hover { background: var(--gold-main); color: #070d14; }
+    .theme-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+    /* COMPACT FAIRY TALE CARDS (Vertical Stack) */
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    .tale-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.38);
+      color: var(--card-text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tale-summary-box {
+      padding: 1.25rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 98px;
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+    }
+    .tale-card.active .tale-summary-box { border-bottom-color: rgba(0, 0, 0, 0.08); }
+    body.dark-mode .tale-card.active .tale-summary-box { border-bottom-color: rgba(255, 255, 255, 0.08); }
+
+    .summary-text-group { flex: 1; min-width: 0; }
+    .tale-title {
+      font-family: var(--font-title);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--card-text);
+      margin-bottom: 0.25rem;
+    }
+    body.dark-mode .tale-title { color: var(--gold-bright); }
+    
+    .tale-excerpt {
+      font-family: var(--font-body);
+      font-size: 0.94rem;
+      color: var(--card-muted);
+      line-height: 1.55;
+    }
+
+    .btn-read-toggle {
+      font-family: var(--font-title);
+      font-size: 1.02rem;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 22px;
+      border: 1px solid var(--gold-main);
+      background: transparent;
+      color: var(--gold-dark);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    body.dark-mode .btn-read-toggle { color: var(--gold-bright); }
+    .btn-read-toggle:hover { background: var(--gold-main); color: #070d14; }
+
+    /* READING VIEWPORT INSIDE CARD */
+    .reading-viewport {
+      display: none;
+      position: relative;
+      padding: 2rem 2.2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .tale-card.active .reading-viewport {
+      display: block;
+      animation: fadeInStory 0.35s ease-in;
+    }
+    @keyframes fadeInStory { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Tezhip Accents */
+    .tezhip-frame { position: absolute; inset: 8px; pointer-events: none; border: 1px solid rgba(223, 168, 74, 0.22); border-radius: 8px; }
+    .tezhip-corner { position: absolute; width: 30px; height: 30px; color: var(--tezhip-gold); opacity: 0.75; }
+    .tezhip-tl { top: -1px; left: -1px; }
+    .tezhip-tr { top: -1px; right: -1px; transform: scaleX(-1); }
+    .tezhip-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+    .tezhip-br { bottom: -1px; right: -1px; transform: scale(-1); }
+
+    /* Harmonious Backgrounds */
+    .tale-card[data-id="1"] .reading-viewport { background-color: #fbf5ea; color: #2b1f11; }
+    body.dark-mode .tale-card[data-id="1"] .reading-viewport { background-color: #1a150e; color: #ecd9c0; }
+    .tale-card[data-id="2"] .reading-viewport { background-color: #f1f6f2; color: #17261a; }
+    body.dark-mode .tale-card[data-id="2"] .reading-viewport { background-color: #0d1810; color: #cee2d2; }
+    .tale-card[data-id="3"] .reading-viewport { background-color: #f0f4f9; color: #122133; }
+    body.dark-mode .tale-card[data-id="3"] .reading-viewport { background-color: #0e1724; color: #d1dfed; }
+    .tale-card[data-id="4"] .reading-viewport { background-color: #fbf1f2; color: #2c161a; }
+    body.dark-mode .tale-card[data-id="4"] .reading-viewport { background-color: #1c0e12; color: #ebd0d5; }
+    .tale-card[data-id="5"] .reading-viewport { background-color: #faf6ee; color: #262115; }
+    body.dark-mode .tale-card[data-id="5"] .reading-viewport { background-color: #18150d; color: #ded6bf; }
+    .tale-card[data-id="6"] .reading-viewport { background-color: #f3f4f6; color: #1c2229; }
+    body.dark-mode .tale-card[data-id="6"] .reading-viewport { background-color: #11151b; color: #d0d7e0; }
+    .tale-card[data-id="7"] .reading-viewport { background-color: #fbf2ef; color: #2e1610; }
+    body.dark-mode .tale-card[data-id="7"] .reading-viewport { background-color: #1c100c; color: #ebd1c8; }
+    .tale-card[data-id="8"] .reading-viewport { background-color: #eff7f5; color: #102621; }
+    body.dark-mode .tale-card[data-id="8"] .reading-viewport { background-color: #0b1815; color: #c5e5de; }
+    .tale-card[data-id="9"] .reading-viewport { background-color: #f2f3f9; color: #181c2f; }
+    body.dark-mode .tale-card[data-id="9"] .reading-viewport { background-color: #101222; color: #d5d8ec; }
+
+    .reading-content-scroll { max-height: 560px; overflow-y: auto; padding-right: 1.2rem; scrollbar-width: thin; scrollbar-color: var(--gold-main) transparent; position: relative; z-index: 2; }
+    .reading-content-scroll::-webkit-scrollbar { width: 7px; }
+    .reading-content-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
+    .reading-content-scroll::-webkit-scrollbar-thumb { background: var(--gold-main); border-radius: 4px; }
+
+    .story-hero-art { width: 100%; margin: 0.6rem 0 1.6rem; border-radius: 10px; overflow: hidden; border: 1px solid rgba(223, 168, 74, 0.35); box-shadow: 0 8px 22px rgba(0,0,0,0.16); background-color: #09121a; }
+    .story-hero-art img { width: 100%; height: auto; max-height: 380px; object-fit: contain; display: block; }
+    .reading-text { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.9; text-align: justify; white-space: pre-line; }
+    .reading-source-badge { margin-top: 1.8rem; padding-top: 1rem; border-top: 1px dashed rgba(223, 168, 74, 0.4); font-family: var(--font-body); font-size: 0.88rem; font-style: italic; opacity: 0.88; }
+    
+    .empty-search { text-align: center; padding: 3.5rem 1rem; background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 12px; color: var(--card-muted); font-family: var(--font-title); font-size: 1.45rem; }
+
+    
+    /* FEEDBACK SECTION (Derste öğrenilen kodların entegrasyonu) */
+    .feedback-box {
+      background: var(--box-bg);
+      border: 1px solid var(--box-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .feedback-box h2 {
+      font-family: var(--font-title);
+      color: var(--gold-main);
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feedback-form {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .feedback-form input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .feedback-form input {
+      padding: 0.6rem 1rem;
+      font-family: var(--font-body);
+      border: 1px solid var(--deck-border);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f0f5fa;
+      outline: none;
+      margin-right: 0.5rem;
+      width: 200px;
+    }
+    .feedback-form input:focus { border-color: var(--gold-main); }
+    #feedbackResult {
+      margin-top: 1rem;
+      font-family: var(--font-title);
+      font-size: 1.2rem;
+      color: var(--gold-bright);
+    }
+    .footer-btn {
+      background: transparent; border: 1px solid var(--gold-main); color: var(--gold-bright);
+      padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer; font-family: var(--font-body);
+      margin-top: 1rem;
+    }
+    .footer-btn:hover { background: var(--gold-main); color: #000; }
+
+    /* COMPACT BIBLIOGRAPHY BOX */
+    .bib-box {
+      background: var(--box-bg);
+      border: 1px solid var(--box-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      margin-top: 4rem;
+    }
+    .bib-box h2 {
+      font-family: var(--font-title);
+      color: var(--gold-main);
+      font-size: 1.8rem;
+      border-bottom: 1px dashed var(--box-border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .bib-list {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .bib-item {
+      padding: 0.8rem;
+      background: rgba(0,0,0,0.2);
+      border-left: 2px solid var(--gold-main);
+      border-radius: 0 6px 6px 0;
+    }
+    .bib-item strong { color: var(--gold-bright); font-family: var(--font-title); font-size: 1.1rem; display: block; margin-bottom: 3px;}
+
+    footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; }
+    
+    @media(max-width: 768px) {
+      .controls-deck { flex-direction: column; align-items: stretch; padding: 0.8rem; }
+      .search-wrap { flex: none; width: 100%; }
+      .btn-actions { justify-content: space-between; }
+      .tale-summary-box { flex-direction: column; align-items: flex-start; padding: 1.1rem; }
+      .btn-read-toggle { width: 100%; text-align: center; margin-top: 0.5rem; }
+      .bib-list { grid-template-columns: 1fr; }
+    }
+  
+    /* YILDIZ İMLEÇ (CURSOR) AYARI */
+    html, body {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23f3c267" stroke="%23b8822d" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>') 12 12, auto;
+    }
+    
+    /* Butonlara ve tıklanabilir alanlara gelince biraz daha parlayan bir yıldız olsun */
+    button, .tale-summary-box, input {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="%23dfa84a" stroke="%23ffffff" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>') 13 13, pointer !important;
+    }
+
+  
+    /* SES KONTROL BUTONU */
+    .audio-btn {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      color: var(--gold-bright);
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .audio-btn:hover { background: var(--gold-main); color: #070d14; }
+    .audio-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  </style>
+</head>
+<body>
+
+  <header class="hero-fullscreen">
+    <h1>Türk Masalları</h1>
+    <p>Geleneksel sözlü anlatı mirasımızın kaynak metinlerle derlenmiş seçkin masal külliyatı.</p>
+  </header>
+
+  <main class="content-area">
+    <div class="wrapper">
+      
+      <!-- CONTROLS DECK -->
+      <nav class="controls-deck">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Masal başlığında ara..." onkeyup="searchByTitle()">
+        </div>
+        <div class="btn-actions">
+          <button class="ctrl-btn btn-select" onclick="chooseRandomTale()">Masal Seç</button>
+          <button class="audio-btn" id="audioToggleBtn" onclick="toggleAudio()" title="Müziği Aç / Kapat">
+            <svg id="audioIcon" viewBox="0 0 24 24">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+          <button class="theme-btn" id="nightModeBtn" onclick="toggleTheme()" title="Gece / Gündüz Modu">
+            <svg id="themeIcon" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      <!-- TALES CARDS (Vertical Stack) -->
+      <div class="cards-container" id="cardsContainer">
+        <!-- Cards injected here -->
+      </div>
+
+      <!-- COMPACT BIBLIOGRAPHY BOX -->
+      <section class="bib-box">
+        <h2>Kaynakça</h2>
+        <div class="bib-list" id="bibList">
+          <!-- Bibliography text injected here -->
+        </div>
+      </section>
+
+      <!-- OKUR DEFTERİ (Derste öğrenilen Input/Alert/TextContent mantığı) -->
+      <section class="feedback-box">
+        <h2>Okur Defteri</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Masal diyarımıza adınızı bırakın.</p>
+        <div class="feedback-form">
+          <input type="text" id="visitorName" placeholder="Adınızı giriniz...">
+          <button class="ctrl-btn" id="btnFeedback">Kaydet</button>
+        </div>
+        <p id="feedbackResult"></p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>Türk Masalları Derlemesi — Geleneksel Sözlü Edebiyat Araştırma Portalı</p>
+    <br>
+    <button class="footer-btn" id="btnRepo">GitHub Deposuna Git</button>
+
+  </footer>
+
+  <script>
+    const tezhipSVG = `
+      <svg class="tezhip-corner tezhip-tl" viewBox="0 0 40 40" fill="currentColor">
+        <path d="M2,2 L18,2 C18,7 15,12 12,15 C9,18 4,18 2,18 Z" opacity="0.4"/>
+        <path d="M2,2 L2,24 C5,21 8,16 11,13 C14,10 19,8 24,2 Z" opacity="0.6"/>
+        <path d="M2,2 L32,2 C28,6 20,8 16,12 C12,16 8,24 2,32 Z"/>
+        <circle cx="8" cy="8" r="2.5"/>
+      </svg>
+      <svg class="tezhip-corner tezhip-tr" viewBox="0 0 40 40" fill="currentColor">
+        <path d="M2,2 L18,2 C18,7 15,12 12,15 C9,18 4,18 2,18 Z" opacity="0.4"/>
+        <path d="M2,2 L2,24 C5,21 8,16 11,13 C14,10 19,8 24,2 Z" opacity="0.6"/>
+        <path d="M2,2 L32,2 C28,6 20,8 16,12 C12,16 8,24 2,32 Z"/>
+        <circle cx="8" cy="8" r="2.5"/>
+      </svg>
+      <svg class="tezhip-corner tezhip-bl" viewBox="0 0 40 40" fill="currentColor">
+        <path d="M2,2 L18,2 C18,7 15,12 12,15 C9,18 4,18 2,18 Z" opacity="0.4"/>
+        <path d="M2,2 L2,24 C5,21 8,16 11,13 C14,10 19,8 24,2 Z" opacity="0.6"/>
+        <path d="M2,2 L32,2 C28,6 20,8 16,12 C12,16 8,24 2,32 Z"/>
+        <circle cx="8" cy="8" r="2.5"/>
+      </svg>
+      <svg class="tezhip-corner tezhip-br" viewBox="0 0 40 40" fill="currentColor">
+        <path d="M2,2 L18,2 C18,7 15,12 12,15 C9,18 4,18 2,18 Z" opacity="0.4"/>
+        <path d="M2,2 L2,24 C5,21 8,16 11,13 C14,10 19,8 24,2 Z" opacity="0.6"/>
+        <path d="M2,2 L32,2 C28,6 20,8 16,12 C12,16 8,24 2,32 Z"/>
+        <circle cx="8" cy="8" r="2.5"/>
+      </svg>
+    `;
+
+    const tales = [
+      {
+        id: 1,
+        title: "İnatçı Horoz",
+        imageName: "inatçı horoz..jpeg",
+        imageClean: "inatçı horoz..jpeg",
+        
+        excerpt: "Büyüklerin tecrübelerine kulak asmayıp kibriyle ormanın kuytularına dalan ve tilkinin tuzağına düşen inatçı horozun ibret dolu öyküsü.",
+        source: "Az Gittik Uz Gittik — Pertev Naili Boratav (İmge Kitabevi, 1992)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde, cinler cirit oynarken eski hamam içinde... Develer tellal iken, pireler berber iken, ben dedemin beşiğini tıngır mıngır sallar iken...
+
+Geniş bir ovanın eteğinde, ulu kavakların gölgelediği huzurlu bir köy varmış. Bu köyün yeşil çimenli avlularında sabahın seherinde neşeyle öten, rengârenk tüyleri pırıl pırıl parıldayan genç bir horoz yaşarmış. Gelgelelim bu horozun öyle bir huyu varmış ki akıllara ziyan: İnatçılıkta üstüne yokmuş! Ne laf dinler, ne büyüklerin öğüdüne kulak asar, sabahları vaktinden evvel ötüp köyün ahalisini uykusundan edermiş.
+
+Köyün ak sakallı dedeleri ve nice kışlar görmüş tecrübeli anaç tavukları onu sık sık uyarır: 'Oğul, gençsin, heveslisin lakin kibrine mağlup olma. Köyün sınırından öteye, o sık ormanın derinliklerine adım atma! Orada nice kurnaz tilkiler, aç kurtlar pusu kurmuştur; senin gibi tüyleri gösterişli toy delikanlıları bir lokmada yutuverirler' derlermiş.
+
+Bizim inatçı horoz ise göğsünü kabartır, kanatlarını çırparak alay edermiş: 'Sizler yaşlanmışsınız, korkak olmuşsunuz! Benim keskin gagam, çelik gibi mahmuzlarım var. Tilki de kimmiş, kurt da neymiş? Karşıma çıkan olursa aklını başından alırım!'
+
+Günün birinde, güneş tepeye yükselirken horoz inadına yenik düşmüş. Çitin üzerinden bir hamlede atlamış; çoban köpeği Karabaş'ın uyuduğu anı kollayıp ormanın gölgeli, tekinsiz patikasına dalmış. Biraz böcek kovalamış, biraz serin pınarlardan su içmiş ve kendi kendine: 'Gördünüz mü korkak ihtiyarlar, işte buradayım ve bana hiçbir şey olmadı!' diye kasılmış.
+
+Tam bu sırada, çalıların arkasından onu pürdikkat süzen kurnaz bir kızıl tilki belirivermiş. Tilki, horozun saflığını ve kibrini hemen sezip yumuşacık bir sesle söze başlamış: 'Selam sana ey sesinin güzelliği Kaf Dağı'na kadar ulaşan beyzade! Hünkarımız bir ferman buyurdu; artık kurdun kuzuyla, tilkinin horozla barış içinde yaşayacağı ilan olundu. İn aşağı şu daldan da dostluğumuzun şerefine kucaklaşalım.'
+
+İnatçı horoz bir an övünçten sarhoş olmuş, neredeyse tilkinin kollarına atılacakmış. Ancak tilkinin gözlerindeki açlık ışıltısını ve arkasında gizlediği pençelerini görünce köydeki ihtiyarların ikazı bir şimşek gibi zihninde çakmış! 'Eyvah!' demiş, 'Büyüklerin sözünü çiğnedim, tuzağa düştüm!'
+
+Fakat horoz da can havliyle kurnazlığa başvurmuş: 'Ne mutlu bu fermana ey tilki kardeş! Bak, köyün çoban köpekleri de bu kutlu haberi kutlamak için koşarak arkandan geliyorlar, birlikte sarılalım!' demiş. Tilki köpek lafını duyar duymaz kulaklarını dikmiş, can korkusuyla arkasına bile bakmadan ormanın derinliklerine kaçıp kaybolmuş.
+
+Horoz kanatlarını delice çırparak soluk soluğa köyün avlusuna geri dönmüş. Çitin ardına sığındığında ayakları titriyor, yüreği ağzında atıyormuş. O günden sonra inadı tamamen bırakmış; bilge ihtiyarların ve usta tavukların sözünü bir nasihat küpesi gibi kulağına takmış, vaktinde ötüp köyün en saygılı horozu olmuş.`
+      },
+      {
+        id: 2,
+        title: "Keloğlan ile Köse",
+        imageName: "keloğlan ve köse.jpeg",
+        imageClean: "keloğlan ve köse.jpeg",
+        
+        excerpt: "Halkı türlü hilelerle sömüren kurnaz köseye karşı, Keloğlan'ın sabır ve ince zekâsıyla kurduğu unutulmaz adalet imtihanı.",
+        source: "Keloğlan Masalları — Tahir Alangu (Yapı Kredi Yayınları, 2014)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde... Masal masal maniki, kulağı dolu paniki. Masal masal matitas, çorba kaynar, taş basar; Keloğlan'ın aklı hem hileyi hem dağı aşar...
+
+Uzak diyarların birinde, saçından eser olmayan, anacığının bir tanesi kel kafalı bir delikanlı yaşarmış. Adına Keloğlan derlermiş. Fakir mi fakir bir kulübede yaşarlar, bir tas tarhana çorbasına şükrederlermiş. Bu memleketin yakınında ise kurnazlığı dillere destan, yüzünde bir tel sakal bitmemiş hilekâr bir Köse peydah olmuş. Köse köy köy dolaşır, saf köylüleri kendine uydurduğu akıl almaz şartlarla hizmetkâr yapar; sonra da hakkını vermeden kapı dışarı edermiş.
+
+Köse'nin bir şartı varmış: 'Benimle pazarlık eden kimse asla öfkelenmeyecek, kaşını çatmayacak, sesini yükseltmeyecektir. Kim öfkelenirse sırtından bir şerit deri yüzülecek ve yüz altın borçlu kalacaktır. Yok eğer ben öfkelenirsem, o kişi benim bütün varlığımı alacaktır.' Nice delikanlılar sabredemeyip canından bezmiş, Köse'ye boyun eğmiş.
+
+Bu zulmü duyan Keloğlan'ın gayret damarı kabarmış. İhtiyar anacığının dizine baş koyup: 'Anacığım, hakkını helal et; ben bu zalim Köse'nin elinden halkın ahını almaya gidiyorum' demiş. Heybesine biraz kuru ekmek koyup yola düşmüş.
+
+Keloğlan Köse'nin çiftliğine varıp kapıyı çalmış. Köse karşısında çelimsiz, kel kafalı bir garip görünce içinden bıyık altından gülmüş: 'Bak hele, bir avanak daha ayağıma geldi!' demiş ve meşhur şartını saymış. Keloğlan tebessümle: 'Kabulümdür Köse Ağa, ama unutma; öfkelenmek yok!' demiş.
+
+Ertesi sabah Köse, Keloğlan'ı sınamak için: 'Al şu yüz koyunu dağa götür; koyunlar akşam geri gelecek ama kuyrukları bende kalacak!' demiş. Keloğlan hiç itiraz etmemiş, koyunları ormana götürmüş. Kasabın birine rastlayıp koyunları iyi bir fiyata satmış, yalnızca kuyruklarını kesip torbaya koymuş. Akşam üzeri çiftliğe dönüp çamurlu bir bataklığın içine kuyrukları saplamış.
+
+Köse'ye koşup: 'Aman Köse Ağa, koyunlar öyle hızlı su içtiler ki hepsi bataklığa gömüldü, bak sadece kuyrukları görünüyor!' demiş. Köse bataklığa koşup bir kuyruğu asılmış, kuyruk elinde kalınca çılgına dönmüş; kan ter içinde bataklığa saplanmış. Tam ağzını açıp 'Bre zındık!' diyecek olmuş ki Keloğlan sırıtarak: 'Aman Köse Ağa, sakın öfkelenme, yoksa şart bozulur!' demiş. Köse dişlerini sıkıp: 'Yok canım, öfkelenmedim' diyebilmiş.
+
+İkinci gün Köse intikam almak için Keloğlan'ı devasa bir tarlayı tek başına sürmeye yollamış. Keloğlan tarladaki iki öküzü komşu köylülere hediye etmiş, sabanın kolunu kırıp gölgede yatıp uyumuş. Köse akşama doğru gelip durumu görünce saçını başını yolacak hale gelmiş, mosmor kesilmiş: 'Benim koca öküzlerim nerede, tarlayı niye sürmedin!' diye haykırmış.
+
+Keloğlan istifini bozmadan: 'Ağam, öküzler tarlayı çok yorgun sürüyordu, ben de onları hayır duası almak için gariplere bağışladım. Sen bana sakın öfkelendim deme ha!' deyince Köse'nin damarları çatlayacak gibi olmuş ama yüz altını kaybetmemek için zorla yutkunmuş.
+
+Üçüncü gece Köse karısıyla gizli bir plan yapmış: 'Bu Keloğlan beni mahvedecek! Gece o samalıkta uyurken samanlığı ateşe verelim, bu dertten kurtulalım.' Keloğlan bu fısıltıyı pencere kenarından duymuş. Gece olunca samalıktan çıkmış, Köse'nin en kıymetli ipek yorganını alıp yerine koca bir kütük koymuş; kendisi de bahçedeki dut ağacının tepesine tünemiş.
+
+Gece yarısı Köse samanlığı ateşe verip sevinçle ellerini ovuşturmuş. Sabahleyin Keloğlan'ı ağacın altında bağdaş kurmuş neşeyle kaval çalarken görünce Köse'nin aklı başından gitmiş! Gözleri yuvalarından fırlamış, ağzından köpükler saçarak: 'Yetti artık bre melun! Sen insan değil şeytansın! Canın da batsın, şartın da batsın, servetim de batsın!' diye avazı çıktığı kadar bağırmış.
+
+Keloğlan ayağa kalkmış, kadıya ve köy halkına seslenmiş: 'Ey ahali, şahit olun! Köse ağzıyla öfkelendiğini ikrar etti!' Kadı Köse'nin bütün haksız kazancını, altınlarını ve çiftliğini Keloğlan'a hükmetmiş. Keloğlan altınları köylülere hakça paylaştırmış, anacığını saray gibi bir eve yerleştirmiş ve ömrünün sonuna kadar doğruluk ve adaletle yaşamış.`
+      },
+      {
+        id: 3,
+        title: "Padişahın Üç Oğlu",
+        imageName: "padişahın üç oğlu.jpeg",
+        imageClean: "padişahın üç oğlu.jpeg",
+        
+        excerpt: "Padişahın tahtını emanet edeceği bilge evladı ararken düzenlediği sınav ve altının değil adaletin mülke temel oluşunun destanı.",
+        source: "Billur Köşk Masalları — Theodor Menzel / Tahir Alangu (MEB Yayınları)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde bir ulu padişah varmış. Bu padişah adaletle hükmeder, memleketinde kurttan kuzuya herkes emniyet içinde yaşarmış. Gel zaman git zaman, padişahın saçlarına karlar yağmış, beli bükülmüş. Tahtını ve tacını emanet edeceği üç tane yiğit şehzadesi varmış ama hangisinin tahta daha layık olduğunu bir türlü kestiremezmiş.
+
+Bir gün üç şehzadesini huzuruna çağırmış, ellerine som altından yapılmış birer yay ve okluk vermiş: 'Oğullarım,' demiş, 'Gidin sarayın en yüksek burcuna çıkın. Her biriniz birer ok fırlatın. Okunuz nereye düşerse o yöne gidecek, bana bu memleketin bekasını ve nizamını sağlayacak en kıymetli hazineyi bulup getireceksiniz. Kim en hayırlı emanetle dönerse, tacım ve tahtım onundur.'
+
+Şehzadeler sarayın burcuna çıkmışlar. Büyük şehzade yayını gerip oku batıya fırlatmış; ortanca şehzade doğuya salmış; en küçük şehzade ise oku gökyüzünün en yüksek katına, güneydeki çorak ve ıssız dağlara doğru bırakmış. Üçü de atlarına binip oklarının ardınca yola revan olmuşlar.
+
+Büyük şehzade okunu zengin bir ticaret kervanının konağında bulmuş. Kervancıbaşı ona sandıklar dolusu Frenk altını, inci kolyeler, pırlantalar ve som zümrütler sunmuş. Büyük şehzade: 'Bundan daha kıymetli hazine mi olur? Padişahlık altınla kurulur!' diyerek saraya dönmüş.
+
+Ortanca şehzade okunu çelik döven demircilerin ve silah ustalarının kalesinde bulmuş. Oradaki ustalar ona ejderha zırhları, keskin Şam kılıçları ve binlerce cenk mızrağı vermiş. Ortanca şehzade: 'Memleket ancak kılıcın keskinliği ve ordunun heybetiyle yönetilir!' diyerek ordusuyla gururlanıp dönmüş.
+
+Küçük şehzade ise okunu araya araya çorak bir ovanın ortasındaki yıkık dökük bir köy kulübesinde bulmuş. Kulübede ak saçlı bir derviş ile yoksul köylüler toplanmış, aralarındaki bir arazi kavgasını hakkaniyetle çözmeye çalışıyorlarmış. Derviş şehzadeyi görünce: 'Hoş geldin oğul, senin okun bizim adalet divanımızın ortasına düştü' demiş.
+
+Küçük şehzade günlerce o köyde kalmış. Köylülerin derdini dinlemiş, açları doyurmuş, haksızlığa uğrayanın hakkını zalimden alıp mazluma vermiş. Yola çıkacağı gün derviş ona ne altın ne kılıç vermiş; yalnızca üzerinde halkın kendi mührü bulunan, adaletin ve vicdanın ilkelerini yazan bir ahitname sunmuş: 'Bu kâğıt altından ağırdır, kılıçtan keskindir oğul; bunu babana götür' demiş.
+
+Üç şehzade sarayda padişahın huzuruna çıkmışlar. Büyük şehzade yerlere kadar eğilip altın sandıklarını açmış: 'Babacığım, hazineni ağzına kadar doldurdum!' demiş. Padişah bakmış, iç çekmiş: 'Altın çabuk tükenir oğul, hırsız çalar, güve yer.'
+
+Ortanca şehzade kılıçları ve zırhları sermiş: 'Babacığım, dünyayı titretecek silahlar getirdim!' demiş. Padişah başını sallamış: 'Zulümle çekilen kılıç gün gelir sahibini biçer oğul; kılıçla alınan toprak adalet olmazsa elde kalmaz.'
+
+Sıra küçük şehzadeye gelmiş. Küçük şehzade dervişin emanet ettiği ahitnameyi babasının dizleri dibine koymuş: 'Babacığım, ben ne altın buldum ne kılıç. Ben halkın sinesindeki adaleti, mazlumun duasını ve helal lokmanın bereketini getirdim. Bir mülkü ayakta tutan tek hazine adalettir.'
+
+Padişah gözyaşları içinde tahtından inmiş, küçük şehzadeyi alnından öpmüş: 'İşte benim hakiki varisim! Adalet mülkün temelidir; adil olmayan padişahın ne altını fayda verir ne askeri.' Küçük şehzade tahta oturmuş, memleketi kırk yıl adalet ve refah içinde yönetmiş.`
+      },
+      {
+        id: 4,
+        title: "Kırk Kız",
+        imageName: "kırk kız.jpeg",
+        imageClean: "kırk kız.jpeg",
+        
+        excerpt: "Kaf Dağı'nın ardındaki devlerin büyüsüyle ayrılan kırk kız kardeşin birbirlerine duydukları sarsılmaz sadakatle tüm tılsımları çözüşü.",
+        source: "Kırk Bir Masal — Eflatun Cem Güney (Atatürk Kültür Merkezi Yayınları, 2010)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde... Masal biter, söz kalır; muhabbet biter, köz kalır. Kırk kızların vefası nesiller boyu dillerde iz kalır...
+
+Eski çağlarda, gök kubbenin altında güllük gülistanlık bir ülkede bir hükümdarın kırk tane dünya güzeli kızı varmış. Bu kızlar öyle terbiyeli, öyle birbirine düşkünmüş ki sanki kırk ayrı beden değil, tek bir candan ibaretmişler. Birinin parmağına diken batsa, otuz dokuzunun birden yüreği sızlarmış. El işini birlikte yapar, sazı birlikte çalar, sarayın bahçesinde bülbülleri kıskandıracak nağmeler söylerlermiş.
+
+Ne var ki Kaf Dağı'nın ardında yaşayan yedi başlı bir ifrit bu kardeşlerin saadetini ve birliğini kıskanmış: 'Ben bunların arasına öyle bir nifak sokayım ki birbirlerinin adını dahi anmasınlar!' demiş. Gece yarısı sarayın üzerine kurşun rengi kara bir duman salmış ve kırk kızı uykularında alıp fırtınayla dünyanın kırk ayrı bucağına fırlatmış. Üstelik üzerlerine öyle ağır bir tılsım bağlamış ki; kim kendi canını düşünüp kardeşini aramazsa taş kesilecekmiş.
+
+Kızların en küçüğü olan Gülperi, gözlerini ıssız, fırtınalı bir dağ başında açmış. Rüzgâr uğulduyor, çakallar uluyormuş. Gülperi ağlayıp sızlanmak yerine ellerini semaya açmış: 'Kardeşlerim neredeyse ben de oraya gideceğim; kırkımız bir araya gelmedikçe bu baş bana haramdır!' demiş.
+
+Ayağına demir çarık giymiş, eline demir asa almış; az gitmiş, uz gitmiş, dere tepe düz gitmiş. Altı ay bir güz gitmiş; bir de dönüp ardına bakmış ki bir arpa boyu yol gitmiş... Yolda susuz bir ceylana su vermiş, ceylan ona kılını armağan etmiş; ateşe düşen bir karınca beyini kurtarmış, karınca ona kanadını vermiş.
+
+Gülperi bu hayvan dostlarının yardımıyla sarp dağları aşmış, kız kardeşlerini birer birer aramaya koyulmuş. Kimi bir devin mağarasında esir imiş, kimi kör bir kuyunun başında çaresiz... Gülperi kardeşlerinin elinden tutmuş; 'Biz biriz, kırkımız bir fidanın kırk dalıyız' diyerek hepsini ardına takmış. Otuz dokuzuncu kardeşi de bulduklarında devlerin ifriti gök gürültüsüyle karşılarına dikilmiş: 'Durun bre cüceler! Kırkıncı kızı asla bulamayacaksınız, o benim tılsımlı sarayımda mermer bir heykele dönüştü!' diye haykırmış.
+
+Kırkıncı kız Gülperi'nin ikizi Ayperi imiş. Gülperi korkusuzca ifritin karşısına dikilmiş: 'Sen taş kalbinle sevgiyi ve vefayı bilemezsin! Kırkımızın yüreği tek atar; bizim sevgimizin ateşi senin mermerini de eritir, tılsımını da bozar!' Kızların hepsi el ele tutuşmuş, tek bir yürek olup gözyaşlarıyla dua etmişler.
+
+O anda devin sarayı temelinden sarsılmış; mermer heykel çatlayıp içinden Ayperi sağ salim çıkmış! İfritin büyüsü bozulup rüzgârda kül olup gitmiş. Kırk kız birbirine sarılıp memleketlerine dönmüşler; ülkede kırk gün kırk gece şenlik kurulmuş.`
+      },
+      {
+        id: 5,
+        title: "Akıllı Köylüler",
+        imageName: "akıllı köylüler.jpeg",
+        imageClean: "akıllı köylüler.jpeg",
+        
+        excerpt: "Halka zulmedip imkânsız şartlar koşan kurnaz vezire karşı, köylülerin el birliğiyle gösterdiği kıvrak halk zekâsının zaferi.",
+        source: "Türk Halk Masalları — Naki Tezel (Akçağ Yayınları, 2001)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde bir krallıkta halktan akıl almaz vergiler toplayan, kibri dağları aşmış zalim bir vezir varmış. Bu vezir padişahın gözünü boyar, köylünün ambarındaki son buğday tanesine kadar el koyarmış. Köylüler vezirin adını duyunca ocaklarını söndürür, kapılarını kilitlermiş.
+
+Günün birinde vezir, dağ eteğindeki Akpınar köyünün vergisini az bulmuş ve köylüye ceza kesmek için şeytani bir bahane aramış. Köyün muhtarını ve aksakallarını huzuruna çağırtıp ferman buyurmuş: 'Önümüzdeki cuma gününe kadar bana konuşan, her suale cevap veren canlı bir taş bulup getireceksiniz! Şayet getiremezseniz köyünüzün bütün tarlalarını, bağlarını ve bahçelerini elinizden alıp hepinizi zindana attıracağım!'
+
+Muhtar ve köylüler dövüne dövüne köye dönmüşler: 'Yahu taş hiç konuşur mu? Vezir bizi kökümüzden kazımak için bu oyunu kurdu!' diye kara kara düşünmeye başlamışlar. Köyün kahvesinde matem havası eserken, köyün koyunlarını güden genç bir çoban öne çıkmış. Çoban: 'Korkmayın ağalarım, vezirin kibri onun basiretini bağlamıştır. Siz bana güvenin, cuma günü veziri köyün girişinde karşılayın ve onu Yüksek Yarıklara götürün' demiş.
+
+Cuma sabahı vezir atlılarıyla, borazanlarıyla böbürlenerek köye girmiş: 'Hani nerede benim konuşan taşım? Yoksa tarlalarınızdan vaz mı geçtiniz bre densizler!' diye gürlemiş. Muhtar hürmetle eğilmiş: 'Vezir Hazretleri, taşımız hazırdır. Lakin öyle ulu, öyle kerametli bir taştır ki ayağınıza gelemez; siz lütfedip onun divanına varmalısınız.'
+
+Vezir merak ve kibirle ordusunu peşine takıp köyün arkasındaki iki yanı göğe uzanan yalçın kayalıkların, derin kanyonun kenarına gelmiş. Çoban kanyonun karşısındaki devasa dik kayayı işaret etmiş: 'İşte Vezir Hazretleri, konuşan taş oradadır. Ne sorarsan sor, sana hakikatle cevap verecektir!'
+
+Vezir inanmaz bir edayla kayaya doğru kükremiş: 'Bre taş, kimsin sen!' 
+Kanyondan bir saniye sonra gök gürültüsü gibi bir ses yankılanmış: 'KİMSİN SEN... SEN... EN!'
+Vezir şaşırmış, gözleri parlamış: 'Beni tanır mısın bre gafil!'
+Kaya aynı heybetle gürlemiş: 'BRE GAFİL... GAFİL... İL!'
+Vezir öfkeden kudurmuş: 'Sana haddini bildireyim mi!'
+Kaya meydan okurcasına haykırmış: 'BİLDİREYİM Mİ... Mİ... İ!'
+
+Vezir kayanın kendi sözlerini ona kat kat büyüterek haykırması karşısında dehşete kapılmış; dizlerinin bağı çözülmüş, 'Bu taş hakikaten konuşuyor ve benimle alay ediyor, bunun gazabından korkulur!' diyerek atını döndürdüğü gibi tozu dumana katarak kaçmış.
+
+Köylüler çobanı omuzlarına alıp bayram etmişler. Akıl ve birlik, kibri ve zulmü bir kez daha dize getirmiş.`
+      },
+      {
+        id: 6,
+        title: "Dev Anası",
+        imageName: "dev anası .jpeg",
+        imageClean: "dev anası .jpeg",
+        
+        excerpt: "Kaf Dağı'nın hiddetli deviyle kaba kuvvet yerine nezaket, hürmet ve merhametle köprü kuran cesur yiğidin destanı.",
+        source: "100 Soruda Türk Halk Edebiyatı — Pertev Naili Boratav (Gerçek Yayınevi, 1969)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, Kaf Dağı'nın sisli eteklerinde ulu bir mağara varmış. Bu mağarada boyu minare kadar, dişleri kazma gibi, nefesi fırtına koparan koca bir Dev Anası yaşarmış. Adımıyla dağlar sarsılır, kükrediğinde gökteki kuşlar kanat çırpmayı unutup yere düşermiş. Etraftaki köyler onun korkusundan gece çıra dahi yakamazmış.
+
+O diyarlarda, hasta anacığına derman arayan yiğit bir delikanlı yaşarmış. Hekimler demişler ki: 'Ananın derdine çare ancak Kaf Dağı'nın tepesinde biten, Dev Anası'nın beklediği binbir derde deva Güneş Otu'dur. Lakin o dağa giden sağ dönmemiştir.'
+
+Delikanlı düşünmüş taşınmış: 'Anamın canı için ben bu başı feda ederim!' demiş. Kılıcını kuşanmış ama aklını da yanına almış. Günlerce tırmanıp devin mağarasının önüne varmış. Mağaranın önünde devasa kemikler yığılıymış. İçeriye baktığında Dev Anası'nı uyurken görmüş. Saçları birbirine dolanmış çalılar gibiymiş, tırnakları uzamış, üstü başı perişanmış.
+
+Delikanlı kılıcını kınına sokmuş: 'Kaba kuvvetle deve diş geçmez; hürmet kapıları açar' demiş. Sessizce içeri süzülmüş. Mağaranın köşesindeki fırından odun alıp yakmış, çorba kaynatmış, sonra da bir fildişi tarak bulup uyuyan Dev Anası'nın karmaşık saçlarını usulca, canını yakmadan taramaya başlamış.
+
+Dev Anası uyanmış, tam bir kükremeyle mağarayı çökertecekken başındaki tatlı okşamayı ve burnuna gelen mis gibi çorba kokusunu fark etmiş. Şaşkınlıkla gözlerini ovuşturmuş: 'Bre insanoğlu! Sen benden korkmaz mısın? Buraya gelenler kılıç sallar, ok atar; sen benim saçımı tarar, aşıma odun atarsın. Sen kimsin, ne dilersin?' demiş.
+
+Delikanlı yerlere kadar hürmetle eğilmiş: 'Ey koca anam! Ben hasta anama şifa olacak Güneş Otu'nu aramaya geldim. Gördüm ki senin de başın dertte, saçın düğümde; bir evlat gibi sana hizmet ettim. Canımı alacaksan da anama otu gönderdikten sonra al, boynum kıldan incedir' demiş.
+
+Dev Anası'nın asırlardır taşlaşmış olan yüreği bu içten sevgi ve hürmet karşısında eriyivermiş; gözünden değirmen taşı büyüklüğünde bir damla yaş yuvarlanmış: 'Bana şimdiye kadar herkes canavar gözüyle baktı; ilk defa bir insanoğlu bana ana dedi, hatırımı saydı' demiş. Mağaranın en gizli sandığını açıp altın yapraklı Güneş Otu'nu ve tılsımlı bir aynayı delikanlıya uzatmış: 'Al bunu oğul, anana tez yetiş. Bu ayna da sana yoldaş olsun; dara düşersen aynaya bak, ben imdadına gelirim.'
+
+Delikanlı dev anasının elini öpüp köyüne koşmuş, otu anasına içirip onu sağlığına kavuşturmuş. O günden sonra Dev Anası ile köylüler arasında barış bağı kurulmuş; sevginin dize getiremeyeceği hiçbir kuvvetin olmadığı cümle âleme ders olmuş.`
+      },
+      {
+        id: 7,
+        title: "Üç Nar",
+        imageName: "üç nar.jpeg",
+        imageClean: "üç nar.jpeg",
+        
+        excerpt: "Büyülü narların sırrını çözmek için sabrın çetin imtihanından geçen ve muradına ancak nefsini terbiye edince kavuşan şehzadenin masalı.",
+        source: "Billur Köşk Masalları — Tahir Alangu (Yapı Kredi Yayınları, 2015)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde... Masal söylerim nardan, haber veririm yardan; sabreden derviş kurtulurmuş her türlü zardan...
+
+Eski diyarların birinde, gönlüne aşk ateşi düşmüş bir şehzade yaşarmış. Şehzade rüyasında öyle bir güzel görmüş ki ne yemeden içmeden tat alır olmuş ne de saraylar ona sığar olmuş. Diyar diyar gezip derdine derman ararken, ak sakallı bir ulu dervişe rast gelmiş. Derviş şehzadenin halini görüp heybesinden sedef kakmalı bir kutu çıkarmış; kutunun içinden yakut gibi parıldayan üç tane iri nar vermiş.
+
+Derviş sıkı sıkıya tembihlemiş: 'Ey şehzade! Aradığın peri kızı bu narların içindedir. Ancak sana şartımdır: Bu narları yalnızca ulu bir akarsuyun kenarında, billur gibi bir pınarın başında keseceksin! Şayet susuz çölde açarsan nardan çıkan periler su ister; su bulamazlarsa göğe uçar giderler ve bir daha onları göremezsin. Sabrını takın, nefsine yenilme!'
+
+Şehzade narları bağrına basıp yola koyulmuş. Az gitmiş, uz gitmiş; kızgın güneşin kavurduğu uçsuz bucaksız bir kumluk sahraya düşmüş. Şehzadenin merakı öyle dayanılmaz bir hal almış ki dervişin sözünü unutuvermiş: 'Yahu bir tanesini şuracıkta açıversem ne çıkar?' demiş. Bıçağını çekip birinci narı yarmış.
+
+Narın içinden ayın on dördü gibi parıldayan bir peri kızı süzülmüş: 'Su! Bir damla su ver yiğidim!' diye inlemiş. Şehzade kırbasına bakmış, kupkuru! Bir damla su veremeyince peri kızı beyaz bir güvercin olup gökyüzüne kanat çırpmış, kaybolmuş. Şehzade dizlerini dövmüş ama nafile.
+
+Birkaç konak daha gitmiş, merak ve sabırsızlık yine yakasını bırakmamış: 'İkincisinde daha dikkatli olurum' diyerek ikinci narı da çatlatmış. Ondan ilkinden de güzel bir peri çıkmış; o da 'Su!' diye feryat etmiş. Su bulunamayınca o da uçup gitmiş. Şehzade hatasını anlamış, gözyaşlarına boğulmuş: 'Ben sabırsızlığım yüzünden iki canı heba ettim. Üçüncü narı su bulmadan asla açmayacağım!' diye yemin etmiş.
+
+Dudakları çatlamış, dili damağına yapışmış halde günlerce yürümüş. Nihayet ulu çınarların gölgelediği, buz gibi suları köpüren bir şelalenin başına varmış. Kana kana su içtikten sonra diz çöküp üçüncü narı hürmetle yarmış.
+
+Narın içinden öyle bir ahu gözlü peri kızı çıkmış ki güzelliği güneşi utandırırmış: 'Su!' demiş peri. Şehzade avuçlarıyla buz gibi pınar suyundan perinin dudaklarına sunmuş. Peri kızı suyu içince şehzadenin boynuna sarılmış: 'Beni bu narın zindanından ancak senin sabrın ve vefan kurtarabilirdi' demiş. 
+
+Şehzade peri kızını atının terkisine almış, memleketine götürmüş. Kırk gün kırk gece düğün yapmışlar; sabrın sonunun selamet olduğunu cümle âleme ilan etmişler.`
+      },
+      {
+        id: 8,
+        title: "Sihirli Elma",
+        imageName: "sihirli elma a.jpeg",
+        imageClean: "sihirli elma a.jpeg",
+        
+        excerpt: "Paylaşmanın bereketini ve açgözlülüğün helak ediciliğini simgeleyen tılsımlı elmanın sırrını çözen küçük şehzadenin hikâyesi.",
+        source: "Masallarımız — Eflatun Cem Güney (Kültür ve Turizm Bakanlığı Yayınları, 1988)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde... Masal başı mizan başı, elmadır gönül aşı; kim ki bencilce yerse dinmez gözünün yaşı...
+
+Büyük bir padişahın saray bağında, kökleri yerin yedi kat dibine inen, dalları bulutlara değen esrarengiz bir elma ağacı varmış. Bu ağaç yılda yalnızca tek bir elma verirmiş. Elmanın bir yanı al, bir yanı ak imiş; kokusu üç konak öteden duyulurmuş. Rivayet olunurmuş ki bu elma sıradan bir meyve değil; insan kalbinin niyetini ortaya çıkaran bir imtihan tılsımıymış.
+
+Padişah yaşlanınca tahtını kime devredeceğini anlamak için üç oğlunu huzuruna çağırmış. O gün ağacın tek elması olgunlaşıp dalından düşmüş. Padişah: 'Bu sihirli elmayı size emanet ediyorum; akşama kadar aranızda nasıl pay edeceğinizi görünce tahtımın sahibini tayin edeceğim' demiş.
+
+Büyük şehzade elmayı kapıp odasına çekilmiş: 'Bu elmanın bir lokması insana dünyaları fethedecek kuvvet verir derler. Ben bunu tek başıma yerim, koca orduyu tek başıma yenerim!' demiş ve elmanın yarısını bir ısırıkta yutmuş. Fakat elmayı yutar yutmaz yüreğini öyle bir açgözlülük, öyle bir hırs ateşi sarmış ki doymak bilmez olmuş; sarayın kilerlerine saldırıp altüst etmiş, aklı başından gitmiş.
+
+Ortanca şehzade elmanın kalan yarısını kapmış: 'Ben de bunu yer, dünyanın en zengin tüccarı olurum!' diyerek gizlice mideye indirmiş. Onu da amansız bir cimrilik ve şüphe sarmış; odasına kapanıp paralarını saymaya, kardeşlerinden dahi korkup titremeye başlamış.
+
+Sıra en küçük şehzadeye geldiğinde elmadan geriye yalnızca tohumları ve birkaç küçük dilim kalmış. Küçük şehzade o dilimleri almış, sarayın kapısına çıkmış; dışarıda bekleşen yetim çocuklara, piri fani ihtiyarlara paylaştırmış. Tohumlarını ise sarayın bahçesine, toprağa sevgiyle gömmüş ve üzerine su dökmüş.
+
+Akşam olup padişah divanı topladığında iki büyük şehzadenin hırs ve cimrilikten perişan halini görmüş. Küçük şehzadeye dönüp: 'Oğlum, sen ne yaptın elmayı?' diye sormuş. Küçük şehzade başını eğmiş: 'Babacığım, rızık paylaşıldıkça çoğalır; ben elmayı açlara yedirdim, tohumlarını da gelecek nesiller nasiplensin diye toprağa emanet ettim' demiş.
+
+O anda bahçede bir mucize gerçekleşmiş; küçük şehzadenin diktiği tohumlardan fışkıran fidanlar bir anda yeşerip meyveye durmuş, bütün bahçe altın elmalarla dolmuş. Padişah ağlayarak küçük oğlunu bağrına basmış: 'Mülk hırsla değil, paylaşmanın bereketiyle ayakta kalır!' diyerek tacı küçük şehzadenin başına koymuş.`
+      },
+      {
+        id: 9,
+        title: "Kuyudaki Kız",
+        imageName: "kuyudaki kız.jpeg",
+        imageClean: "kuyudaki kız.jpeg",
+        
+        excerpt: "Haset ve kıskançlıkla derin bir kuyuya atılan masum kızın, sabır ve temiz kalbiyle yer altı padişahının imtihanlarından geçip nura kavuşması.",
+        source: "Anadolu-Türk Masalları — Prof. Dr. Saim Sakaoğlu (Akçağ Yayınları, 1999)",
+        fullStory: `Bir varmış, bir yokmuş; evvel zaman içinde, kalbur saman içinde... Masal masal maniki, kuyunun dibi yankı; mazlumun duası deler yedi kat gökteki çarkı...
+
+Vaktiyle bir köyde, dünya tatlısı, melek huylu bir öksüz kızcağız yaşarmış. Adına Fatma derlermiş. Fatma'nın bir üvey anası ve iki de kıskanç üvey kız kardeşi varmış. Üvey kardeşleri gün boyu ayna karşısında süslenir, Fatma'ya ise evin en ağır işlerini yaptırırlarmış: Kül eler, odun taşır, su çekermiş. Lakin Fatma'nın yüzündeki nur ve tebessüm hiç solmazmış.
+
+Günün birinde kızlar köyün dışındaki eski kuyunun başına yün eğirmeye gitmişler. Kıskanç kardeşler Fatma'nın elindeki gümüş iğciği gizlice kuyuya fırlatmışlar: 'Haydi in de al iğciğini, yoksa anamız seni eve sokmaz!' diyerek Fatma'yı zorla itip kör kuyuya düşürmüşler.
+
+Fatma kuyunun dibine düşmüş ama mucize kabilinden burnu bile kanamamış. Gözlerini açtığında karşısında yemyeşil çayırların, billur ırmakların aktığı bambaşka bir yer altı âlemi bulmuş. Yolda yürürken fırında yanmak üzere olan ekmekler görmüş: 'Aman güzel kız, bizi kürekle fırından çıkar, yoksa kömür olacağız!' demişler. Fatma hemen koşup ekmekleri yanmaktan kurtarmış. İleride dalları meyveden kırılmak üzere olan bir elma ağacı: 'Aman kızım, dallarımı silkele, yüküm ağır geldi!' demiş. Fatma elmayı silkelemiş, dallarını ferahlatmış. İleride yaralı bir köpeğin yarasını sarmış.
+
+Nihayetinde nurlu bir sarayın kapısına varmış. Sarayda yer altının bilge sultanı yaşarmış. Sultan Fatma'yı sınamak için ona üç gün hizmet vermiş; Fatma her işi sabırla, güler yüzle ve dürüstlükle yapmış. Üçüncü gün sultan onu huzuruna çağırmış: 'Ey güzel huylu kız! Yaptığın her iyilik senin yolunu açtı. Şimdi sana iki sandık sunuyorum; biri parlak zümrütlerle süslü koca sandık, diğeri sade tahta bir sandık. Hangisini dilersin?'
+
+Fatma: 'Sultanım, bana sade tahta sandık yeter de artar bile' demiş. Sultan onu yeryüzüne çıkaran tılsımlı merdivene bindirmiş. Fatma köydeki evine varıp tahta sandığı açtığında içinden paha biçilmez inciler, altınlar ve elmaslar dökülüvermiş!
+
+Bunu gören haset üvey kardeşler hırsla kuyuya atlamışlar. Yolda fırındaki ekmekleri tekmelemişler, elma ağacına taş atmışlar, yaralı köpeği kovalamışlar. Sultanın sarayına varıp kaba saba davranmışlar ve süslü sandığı kapıp kaçmışlar. Eve gelip sandığı açtıklarında ise içinden yılanlar, akrepler ve katran dumanı çıkmış; neye uğradıklarını şaşırmışlar.
+
+Fatma ise sabrının ve merhametinin mükâfatını almış; servetini köyün gariplerine dağıtıp memleketin adil beyiyle evlenmiş, ömrü boyunca mutluluk içinde yaşamış.`
+      }
+    ];
+
+    const bibliography = [
+      {
+        story: "İnatçı Horoz",
+        author: "Pertev Naili Boratav",
+        book: "Az Gittik Uz Gittik",
+        publisher: "İmge Kitabevi Yayınları",
+        year: "1992 (Ankara)",
+        type: "Hayvan Masalları / Ahlaki-Eğitici Halk Anlatısı"
+      },
+      {
+        story: "Keloğlan ile Köse",
+        author: "Tahir Alangu",
+        book: "Keloğlan Masalları",
+        publisher: "Yapı Kredi Yayınları",
+        year: "2014 (İstanbul)",
+        type: "Zekâ, Mizah ve Sosyal Adalet Masalı"
+      },
+      {
+        story: "Padişahın Üç Oğlu",
+        author: "Theodor Menzel (Derleyen) / Tahir Alangu & Mehmet Kaplan (Hazırlayan)",
+        book: "Billur Köşk Masalları",
+        publisher: "Millî Eğitim Bakanlığı (MEB) Kültür Yayınları",
+        year: "Klasik Derleme",
+        type: "Hükümdarlık, Erdem ve İmtihan Masalı"
+      },
+      {
+        story: "Kırk Kız",
+        author: "Eflatun Cem Güney",
+        book: "Kırk Bir Masal",
+        publisher: "Atatürk Kültür Merkezi Başkanlığı Yayınları",
+        year: "2010 (Ankara)",
+        type: "Tılsımlı Kahramanlık ve Vefa Masalı"
+      },
+      {
+        story: "Akıllı Köylüler",
+        author: "Naki Tezel",
+        book: "Türk Halk Masalları",
+        publisher: "Akçağ Yayınları / Kültür Bakanlığı",
+        year: "2001 (Ankara)",
+        type: "Kıvrak Halk Zekâsı ve Dayanışma Masalı"
+      },
+      {
+        story: "Dev Anası",
+        author: "Pertev Naili Boratav",
+        book: "100 Soruda Türk Halk Edebiyatı & Masal Tip Kataloğu",
+        publisher: "Gerçek Yayınevi",
+        year: "1969 (İstanbul)",
+        type: "Mitolojik Anlatı / Kaf Dağı ve Devler Masalı"
+      },
+      {
+        story: "Üç Nar",
+        author: "Anonim Halk Anlatısı (Yayına Hazırlayan: Tahir Alangu)",
+        book: "Billur Köşk Masalları",
+        publisher: "Yapı Kredi Yayınları",
+        year: "2015 (İstanbul)",
+        type: "Olağanüstü / Tılsımlı Aşk ve Sabır Masalı"
+      },
+      {
+        story: "Sihirli Elma",
+        author: "Eflatun Cem Güney",
+        book: "Masallarımız",
+        publisher: "Kültür ve Turizm Bakanlığı Yayınları / Varlık Yayınları",
+        year: "1988 (İstanbul)",
+        type: "Cömertlik, Adalet ve Paylaşma Masalı"
+      },
+      {
+        story: "Kuyudaki Kız",
+        author: "Prof. Dr. Saim Sakaoğlu",
+        book: "Anadolu-Türk Masalları",
+        publisher: "Akçağ Yayınları",
+        year: "1999 (Ankara)",
+        type: "Sabır, Temiz Kalplilik ve İyilik Masalı"
+      }
+    ];
+
+    function buildReadingHTML(tale) {
+      return `
+        <div class="tezhip-frame">
+          ${tezhipSVG}
+        </div>
+        <div class="reading-content-scroll">
+          <div class="story-hero-art">
+            <img src="gorseller/${tale.imageClean}" alt="${tale.title} İllüstrasyonu" loading="lazy">
+          </div>
+          <div class="reading-text">${tale.fullStory}</div>
+          <div class="reading-source-badge">
+            <strong>Kaynak:</strong> ${tale.source}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTales(list) {
+      const container = document.getElementById('cardsContainer');
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="empty-search">Aradığınız başlığa uygun masal bulunamadı.</div>';
+        return;
+      }
+
+      list.forEach(tale => {
+        const card = document.createElement('article');
+        card.className = 'tale-card';
+        card.setAttribute('data-id', tale.id);
+        card.id = 'tale-card-' + tale.id;
+
+        card.innerHTML = `
+          <div class="tale-summary-box" onclick="toggleTaleReading(${tale.id})">
+            <div class="summary-text-group">
+              <h2 class="tale-title">${tale.title}</h2>
+              <p class="tale-excerpt">${tale.excerpt}</p>
+            </div>
+            <button class="btn-read-toggle" id="btn-read-${tale.id}">Masalı Oku</button>
+          </div>
+          <div class="reading-viewport" id="reading-body-${tale.id}">
+            ${buildReadingHTML(tale)}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleTaleReading(id) {
+      const card = document.getElementById('tale-card-' + id);
+      const btn = document.getElementById('btn-read-' + id);
+      const isActive = card.classList.contains('active');
+
+      if (isActive) {
+        card.classList.remove('active');
+        btn.textContent = 'Masalı Oku';
+      } else {
+        card.classList.add('active');
+        btn.textContent = 'Kapat';
+      }
+    }
+
+    function renderBib() {
+      const container = document.getElementById('bibList');
+      bibliography.forEach(b => {
+        container.innerHTML += `
+          <div class="bib-item">
+            <strong>${b.story}</strong>
+            Yazar/Derleyen: ${b.author}<br>
+            Eser: <em>${b.book}</em><br>
+            Yayınevi: ${b.publisher}, ${b.year}
+          </div>
+        `;
+      });
+    }
+
+    function normalizeTr(str) {
+      if (!str) return '';
+      return str.replace(/İ/g, 'i').replace(/I/g, 'ı').toLocaleLowerCase('tr-TR').trim();
+    }
+
+    function searchByTitle() {
+      const rawInput = document.getElementById('searchInput').value;
+      const normalizedQuery = normalizeTr(rawInput);
+      const filtered = tales.filter(t => normalizeTr(t.title).includes(normalizedQuery));
+      renderTales(filtered);
+    }
+
+    function chooseRandomTale() {
+      document.getElementById('searchInput').value = '';
+      renderTales(tales);
+
+      document.querySelectorAll('.tale-card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.btn-read-toggle').forEach(b => b.textContent = 'Masalı Oku');
+
+      const randomTale = tales[Math.floor(Math.random() * tales.length)];
+      const targetCard = document.getElementById('tale-card-' + randomTale.id);
+      const targetBtn = document.getElementById('btn-read-' + randomTale.id);
+
+      if (targetCard) {
+        targetCard.classList.add('active');
+        targetBtn.textContent = 'Kapat';
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      const icon = document.getElementById('themeIcon');
+      if (isDark) {
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    renderTales(tales);
+    
+    // ARKA PLAN SESİ KONTROLÜ
+    let isPlaying = false;
+    function toggleAudio() {
+      const audio = document.getElementById('bgAudio');
+      const icon = document.getElementById('audioIcon');
+      
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+      } else {
+        audio.play().then(() => {
+          isPlaying = true;
+          icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+        }).catch(e => {
+          alert("Ses dosyası oynatılamadı. Lütfen 'gorseller' klasöründe 'arka plan ses.mp3' dosyasının olduğundan emin olun.");
+        });
+      }
+    }
+
+    renderBib();
+
+    // DERSTE ÖĞRENİLEN KODLARIN ENTEGRASYONU
+    
+    // 1. Input kontrolü, Alert ve TextContent kullanımı (Ekran Resmi 2026-10-07)
+    document.getElementById("btnFeedback").addEventListener("click", function() {
+      const ad = document.getElementById("visitorName").value;
+      
+      if (ad === "") {
+        alert("Lütfen adınızı yazınız!");
+        return;
+      }
+      
+      document.getElementById("feedbackResult").textContent = "Teşekkürler " + ad + ", masal diyarımıza hoş geldin!";
+      document.getElementById("visitorName").value = ""; // Kutuyu temizle
+    });
+
+    // 2. Yeni sayfa açma mantığı (Ekran Resmi 2026-09-30)
+    // Ödevde HTML tek sayfa olması gerektiği için hakkinda.html yerine GitHub linki açtırıyoruz.
+    document.getElementById("btnRepo").addEventListener("click", function() {
+      window.open("https://github.com", "_blank");
+    });
+
+  </script>
+
+    <!-- ARKA PLAN SESİ (Masalsı Atmosfer) -->
+    <audio id="bgAudio" loop>
+      <source src="gorseller/arka%20plan%20ses.mp3" type="audio/mp3">
+      Tarayıcınız ses etiketini desteklemiyor.
+    </audio>
+
+  </body>
+</html>
